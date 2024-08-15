@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUBY STAR Registration</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
+            color: #fff;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .loading-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: url('https://starquest-talent-network.simdif.com/images/public/sd_66b1531e019e7.jpg?no_cache=1722904397');
+            background-size: cover;
+            width: 100%;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .loading-screen h1 {
+            color: yellow;
+            font-size: 36px;
+            animation: pulse 1.5s infinite;
+            margin: 20px 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .registration-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            margin: 50px auto;
+            text-align: center;
+            animation: slideUp 1s ease-in-out;
+            overflow-y: auto;
+        }
+
+        .registration-container h1 {
+            margin-bottom: 20px;
+            color: yellow;
+            font-size: 28px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .registration-container input[type="text"],
+        .registration-container input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: black;
+        }
+
+        .registration-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .registration-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-align: left;
+            color: yellow;
+        }
+
+        .registration-container .payment-info {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .registration-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff512f;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            position: relative;
+            margin-top: 10px;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .registration-container button:hover {
+            background-color: #dd2476;
+            transform: translateY(-3px);
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ff512f;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.3s;
+            animation: pulse 2s infinite;
+            z-index: 100;
+        }
+
+        .floating-button:hover {
+            background-color: #dd2476;
+            transform: scale(1.1);
+        }
+
+        .interactive-message {
+            background-color: yellow;
+            color: red;
+            padding: 10px;
+            border-radius: 5px;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 1s ease-in-out;
+            z-index: 100;
+        }
+
+        .interactive-message.active {
+            display: block;
+            animation: pulse 2s infinite;
+        }
+
+        .success-message {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 20;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .success-message h2 {
+            margin: 0;
+            padding: 0;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .success-message .icon {
+            font-size: 50px;
+            color: limegreen;
+            margin-bottom: 20px;
+        }
+
+        .download-link {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            color: yellow;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <h1>Ruby Star ✨ Registration</h1>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="registration-container" id="registration-container">
+        <h1>Register Now</h1>
+        <form id="registrationForm" onsubmit="submitForm(); return false;">
+            <input type="text" id="full-name" placeholder="Full Name" required>
+            <input type="text" id="bank-account-number" placeholder="Bank Account Number" required>
+            <input type="text" id="bank-name" placeholder="Bank Name" required>
+            <input type="text" id="address" placeholder="Address" required>
+            <input type="text" id="country" placeholder="Country" required>
+            <input type="tel" id="phone-number" placeholder="Phone Number" required>
+            <input type="text" id="username" placeholder="Preferred Username" required>
+            <input type="text" id="referrer-id" placeholder="Input Referrer's RUBY ID (Optional)">
+            <div class="payment-info">
+                <p>Please pay ₦5000 only to the HR account below:</p>
+                <p><strong>Account Number:</strong> 7025334855</p>
+                <p><strong>Bank:</strong> Opay</p>
+                <p><strong>Account Name:</strong> Samuel U. I.</p>
+            </div>
+            <label><input type="checkbox" id="agree-terms" required> I agree to Ruby Star terms and conditions</label>
+            <label><input type="checkbox" id="paid-fee" required> I've successfully paid the registration fee</label>
+            <button type="submit">Register</button>
+        </form>
+        <a href="#" id="download-link" class="download-link" onclick="downloadFile()">Download Your File</a>
+    </div>
+
+    <!-- Floating Button -->
+    <button class="floating-button" onclick="showMessage()">❔</button>
+
+    <!-- Interactive Message -->
+    <div class="interactive-message" id="interactive-message">
+        Need help? Contact our support team.
+    </div>
+
+    <!-- Success Message -->
+    <div class="success-message" id="success-message">
+        <div>
+            <div class="icon">✅</div>
+            <h2>🤝 You have successfully sent a registration request to Ruby Star. Once your payment is verified, you will receive an email containing your unique RUBY ID and can start earning big!</h2>
+        </div>
+    </div>
+
+    <script>
+        // Show the registration form after the loading screen
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('registration-container').style.display = 'flex';
+            }, 3000); // Loading screen duration
+        };
+
+        // Function to show interactive message
+        function showMessage() {
+            const message = document.getElementById('interactive-message');
+            message.classList.add('active');
+            setTimeout(() => {
+                message.classList.remove('active');
+            }, 5000);
+        }
+
+        // Submit form via mailto and show success message
+        function submitForm() {
+            const fullName = document.getElementById('full-name').value;
+            const bankAccountNumber = document.getElementById('bank-account-number').value;
+            const bankName = document.getElementById('bank-name').value;
+            const address = document.getElementById('address').value;
+            const country = document.getElementById('country').value;
+            const phoneNumber = document.getElementById('phone-number').value;
+            const username = document.getElementById('username').value;
+            const referrerId = document.getElementById('referrer-id').value;
+            const agreeTerms = document.getElementById('agree-terms').checked;
+            const paidFee = document.getElementById('paid-fee').checked;
+
+            if (agreeTerms && paidFee) {
+                const mailtoLink = `mailto:samuelugonna2015@gmail.com?subject=RUBY%20STAR%20Registration&body=Full%20Name:%20${encodeURIComponent(fullName)}%0A` +
+                    `Bank%20Account%20Number:%20${encodeURIComponent(bankAccountNumber)}%0A` +
+                    `Bank%20Name:%20${encodeURIComponent(bankName)}%0A` +
+                    `Address:%20${encodeURIComponent(address)}%0A` +
+                    `Country:%20${encodeURIComponent(country)}%0A` +
+                    `Phone%20Number:%20${encodeURIComponent(phoneNumber)}%0A` +
+                    `Preferred%20Username:%20${encodeURIComponent(username)}%0A` +
+                    `Referrer's%20RUBY%20ID:%20${encodeURIComponent(referrerId)}`;
+
+                window.location.href = mailtoLink;
+
+                // Show success message
+                document.getElementById('registration-container').style.display = 'none';
+                document.getElementById('success-message').style.display = 'flex';
+
+                // Show download link
+                document.getElementById('download-link').style.display = 'block';
+            } else {
+                alert("Please ensure you've agreed to the terms and conditions and confirmed payment of the registration fee.");
+            }
+        }
+
+        // Function to download the file
+        function downloadFile() {
+            const link = document.createElement('a');
+            link.href = '/mnt/data/RubyStar_Earn.html';  // Replace with the correct file path
+            link.download = 'RubyStar_Earn.html';
+            link.click();
+        }
+    </script>
+</body>
+</html>
